@@ -79,6 +79,7 @@
 
     var model = {
         init: function () {
+            this.settings.init();
             if (window.localStorage.getItem('personalData'))
             this.data = $.parseJSON(window.localStorage.getItem('personalData'));
 
@@ -337,6 +338,10 @@
                     name: 'Croatian',
                     yandexCode: 'hr'
                 }
+            },
+            settings: {
+                widthDivCards: 9,
+                widthTranslationCard: 3
             }
         },
         /*getIndex: function(object, key) {
@@ -352,6 +357,27 @@
             var res = this.data.langs[code];
             if (!("hidden" in res)) res.hidden = false;
             return res;
+        },
+        settings: {
+            init: function () {
+                this.parent = model;
+            },
+            getWidthDivCards: function () {
+                return this.parent.data.settings.widthDivCards;
+            },
+            setWidthDivCards: function (columns) {
+                if (columns < this.parent.data.settings.widthTranslationCard ||
+                        columns < 4 || columns > 12) return;
+                this.parent.data.settings.widthDivCards = columns;
+            },
+            getWidthTranslationCard: function () {
+                return this.parent.data.settings.widthTranslationCard;
+            },
+            setWidthTranslationCard: function (columns) {
+                if (columns > this.parent.data.settings.widthDivCards ||
+                        columns < 2 || columns > 12) return;
+                this.parent.data.settings.widthTranslationCard = columns;
+            }
         },
         saveData: function () {
             window.localStorage.setItem('personalData', JSON.stringify(this.data));
