@@ -79,8 +79,12 @@
 
     var model = {
         init: function () {
-            this.data.langs = window.localStorage.getItem('personalData') ?
-                    $.parseJSON(window.localStorage.getItem('personalData')) : {
+            if (window.localStorage.getItem('personalData'))
+            this.data = $.parseJSON(window.localStorage.getItem('personalData'));
+
+        },
+        data: {
+            langs: {
                 en: {
                     name: 'English',
                     yandexCode: 'en'
@@ -333,11 +337,7 @@
                     name: 'Croatian',
                     yandexCode: 'hr'
                 }
-            };
-
-        },
-        data: {
-            langs: {}
+            }
         },
         /*getIndex: function(object, key) {
          var index = 0;
