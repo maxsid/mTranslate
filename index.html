@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="material.indigo-pink.min.css">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', 'Helvetica', sans-serif;
+        }
+
+        .translation-card {
+            min-height: 0;
+            min-width: 100px;
+            margin-bottom: 8px;
+            margin-right: 8px;
+            -webkit-box-flex: 1;
+            -webkit-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            z-index: 0;
+        }
+
+        @media all and (min-width: 320px) {
+            .translation-card {
+                min-width: 320px;
+            }
+        }
+
+        .translation-card .mdl-card--border {
+            padding: 0;
+        }
+
+        .translation-card textarea {
+            resize: none;
+        }
+
+        .translation-card .mdl-textfield {
+            padding-top: 0;
+            padding-bottom: 0;
+            width: 100%;
+        }
+
+        .translation-card .mdl-textfield__label {
+            padding-top: 4px;
+            padding-bottom: 4px;
+            top: 0;
+        }
+
+        .translation-card .mdl-textfield__label::after {
+            bottom: 0;
+        }
+
+        #translate-button {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body class="mdl-color--grey-200">
+<div id="app"></div>
+
+<script>
+
+    function initialization() {
+        model.init();
+        view.init();
+        controller.init();
+
+        view.translations.init();
+        controller.translations.init();
+    }
+
+    var model = {
+        init: function () {
+            this.data.langs = window.localStorage.getItem('personalData') ?
+                    $.parseJSON(window.localStorage.getItem('personalData')) : {
+                en: {
+                    name: 'English',
+                    yandexCode: 'en'
+                },
+                ru: {
+                    name: 'Russian',
+                    yandexCode: 'ru'
+                },
+                de: {
+                    name: 'German',
+                    yandexCode: 'de'
+                },
+                es: {
+                    name: 'Spanish',
+                    yandexCode: 'es'
+                },
+                zh: {
+                    name: 'Chinese',
+                    yandexCode: 'zh'
+                },
+                fr: {
+                    name: 'French',
+                    yandexCode: 'fr'
+                },
+                ja: {
+                    name: 'Japanese',
+                    yandexCode: 'ja'
+                },
+                pt: {
+                    name: 'Portuguese',
+                    yandexCode: 'pt'
+                },
+                pl: {
+                    name: 'Polish',
+                    yandexCode: 'pl'
+                },
+                it: {
+                    name: 'Italian',
+                    yandexCode: 'it'
+                },
+                tr: {
+                    name: 'Turkish',
+                    yandexCode: 'tr'
+                },
+                ar: {
+                    name: 'Arabic',
+                    yandexCode: 'ar'
+                },
+                nl: {
+                    name: 'Dutch',
+                    yandexCode: 'nl'
+                },
+                ko: {
+                    name: 'Korean',
+                    yandexCode: 'ko'
+                },
+                ms: {
+                    name: 'Malay',
+                    yandexCode: 'ms'
+                },
+                vi: {
+                    name: 'Vietnamese',
+                    yandexCode: 'vi'
+                },
+                uk: {
+                    name: 'Ukrainian',
+                    yandexCode: 'uk'
+                },
+                th: {
+                    name: 'Thai',
+                    yandexCode: 'th'
+                },
+                az: {
+                    name: 'Azerbaijani',
+                    yandexCode: 'az'
+                },
+                fa: {
+                    name: 'Persian',
+                    yandexCode: 'fa'
+                },
+                ro: {
+                    name: 'Romanian',
+                    yandexCode: 'ro'
+                },
+                uz: {
+                    name: 'Uzbek',
+                    yandexCode: 'uz'
+                },
+                id: {
+                    name: 'Indonesian',
+                    yandexCode: 'id'
+                },
+                tl: {
+                    name: 'Tagalog',
+                    yandexCode: 'tl'
+                },
+                hu: {
+                    name: 'Hungarian',
+                    yandexCode: 'hu'
+                },
+                el: {
+                    name: 'Greek',
+                    yandexCode: 'el'
+                },
+                cs: {
+                    name: 'Czech',
+                    yandexCode: 'cs'
+                },
+                mg: {
+                    name: 'Malagasy',
+                    yandexCode: 'mg'
+                },
+                be: {
+                    name: 'Belarusian',
+                    yandexCode: 'be'
+                },
+                af: {
+                    name: 'Afrikaans',
+                    yandexCode: 'af'
+                },
+                sq: {
+                    name: 'Albanian',
+                    yandexCode: 'sq'
+                },
+                eu: {
+                    name: 'Basque',
+                    yandexCode: 'eu'
+                },
+                bs: {
+                    name: 'Bosnian',
+                    yandexCode: 'bs'
+                },
+                bg: {
+                    name: 'Bulgarian',
+                    yandexCode: 'bg'
+                },
+                da: {
+                    name: 'Danish',
+                    yandexCode: 'da'
+                },
+                et: {
+                    name: 'Estonian',
+                    yandexCode: 'et'
+                },
+                fi: {
+                    name: 'Finnish',
+                    yandexCode: 'fi'
+                },
+                ka: {
+                    name: 'Georgian',
+                    yandexCode: 'ka'
+                },
+                ht: {
+                    name: 'Haitian(Creole)',
+                    yandexCode: 'ht'
+                },
+                is: {
+                    name: 'Icelandic',
+                    yandexCode: 'is'
+                },
+                ga: {
+                    name: 'Irish',
+                    yandexCode: 'ga'
+                },
+                kk: {
+                    name: 'Kazakh',
+                    yandexCode: 'kk'
+                },
+                la: {
+                    name: 'Latin',
+                    yandexCode: 'la'
+                },
+                lv: {
+                    name: 'Latvian',
+                    yandexCode: 'lv'
+                },
+                lt: {
+                    name: 'Lithuanian',
+                    yandexCode: 'lt'
+                },
+                mk: {
+                    name: 'Macedonian',
+                    yandexCode: 'mk'
+                },
+                mt: {
+                    name: 'Maltese',
+                    yandexCode: 'mt'
+                },
+                mn: {
+                    name: 'Mongolian',
+                    yandexCode: 'mn'
+                },
+                no: {
+                    name: 'Norwegian',
+                    yandexCode: 'no'
+                },
+                sr: {
+                    name: 'Serbian',
+                    yandexCode: 'sr'
+                },
+                sk: {
+                    name: 'Slovak',
+                    yandexCode: 'sk'
+                },
+                sl: {
+                    name: 'Slovenian',
+                    yandexCode: 'sl'
+                },
+                sw: {
+                    name: 'Swahili',
+                    yandexCode: 'sw'
+                },
+                sv: {
+                    name: 'Swedish',
+                    yandexCode: 'sv'
+                },
+                tg: {
+                    name: 'Tajik',
+                    yandexCode: 'tg'
+                },
+                tt: {
+                    name: 'Tatar',
+                    yandexCode: 'tt'
+                },
+                cy: {
+                    name: 'Welsh',
+                    yandexCode: 'cy'
+                },
+                hy: {
+                    name: 'Armenian',
+                    yandexCode: 'hy'
+                },
+                gl: {
+                    name: 'Galician',
+                    yandexCode: 'gl'
+                },
+                he: {
+                    name: 'Yiddish',
+                    yandexCode: 'he'
+                },
+                ca: {
+                    name: 'Catalan',
+                    yandexCode: 'ca'
+                },
+                ky: {
+                    name: 'Kyrgyz',
+                    yandexCode: 'ky'
+                },
+                hr: {
+                    name: 'Croatian',
+                    yandexCode: 'hr'
+                }
+            };
+
+        },
+        data: {
+            langs: {}
+        },
+        /*getIndex: function(object, key) {
+         var index = 0;
+         for (var k in object){
+         if (k == key) return index;
+         index++;
+         }
+         return null;
+         },*/
+        getLangData: function (code) {
+            if (!(code in this.data.langs)) return null;
+            var res = this.data.langs[code];
+            if (!("hidden" in res)) res.hidden = false;
+            return res;
+        },
+        saveData: function () {
+            window.localStorage.setItem('personalData', JSON.stringify(this.data));
+        },
+        translate: {
+            currentLang: null,
+            yandex: function (fromObject, toObject, text, callback) {
+                if (!fromObject.yandexCode || !toObject.yandexCode) return;
+                $.post("https://translate.yandex.net/api/v1.5/tr.json/translate",
+                        {
+                            "key": "trnsl.1.1.20160306T132910Z.b380b98fe03422c9.515272893d0e36c03e08403f813bb5c4d26d6e94",
+                            "text": text, "lang": fromObject.yandexCode + "-" + toObject.yandexCode
+                        }, callback);
+            }
+        }
+    };
+
+    var view = {
+        divApp: null,
+
+        init: function () {
+            this.divApp = $('#app');
+        },
+        translations: {
+            divCards: null,
+            isStarted: false,
+
+            init: function () {
+                this.parent = view;
+                this.parent.divApp.append('<div id="trans-cards" class="mdl-grid"></div>');
+                this.divCards = $('#trans-cards');
+
+                this.cards.init();
+                this.fab.init();
+                this.isStarted = true;
+            },
+            cards: {
+                init: function () {
+                    this.parent = view.translations;
+                    if (!this.parent.divCards) return;
+                    for (var code in model.data.langs) {
+                        if (!model.data.langs.hasOwnProperty(code)) continue;
+                        var l = model.getLangData(code);
+                        this.add(l.name, code, l.hidden);
+                    }
+                },
+                add: function (title, code, hidden) {
+                    this.parent.divCards.append(
+                            '<div id="translation-card-' + code + '" class="translation-card mdl-card mdl-shadow--2dp" ' + (hidden ? 'hidden' : '') + '>' +
+                            '   <div class="mdl-card__title">' + title + '</div>' +
+                            '   <div class="mdl-card__actions mdl-card--border"></div>' +
+                            '   <div class="mdl-card__supporting-text">' +
+                            '       <div class="mdl-textfield mdl-js-textfield">' +
+                            '           <textarea class="mdl-textfield__input" type="text" rows="2" cols="1000" id="textarea-' + code + '" ></textarea>' +
+                            '           <label class="mdl-textfield__label" for="textarea-' + code + '">Text...</label>' +
+                            '       </div>' +
+                            '   </div>' +
+                            '</div>');
+                },
+                hide: function (code) {
+                    $('#translation-card-' + code).attr('hidden', true);
+                },
+                show: function (code) {
+                    $('#translation-card-' + code).removeAttr('hidden');
+                },
+                setCurrent: function (code) {
+                    this.clearCurrent();
+                    $('#translation-card-' + code).addClass('mdl-color--indigo');
+                },
+                clearCurrent: function () {
+                    $('.translation-card').removeClass('mdl-color--indigo')
+                }
+            },
+            fab: {
+                init: function () {
+                    this.parent = view.translations;
+                    if (!this.parent.divCards) return;
+                    this.parent.divCards.append(
+                            '<button id="translate-button" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored mdl-button--disabled">' +
+                            '   <i class="material-icons">translate</i>' +
+                            '</button>'
+                    )
+                },
+                isEnabled: false,
+                enable: function () {
+                    if (this.isEnabled) return;
+                    $('#translate-button').removeClass('mdl-button--disabled');
+                    this.isEnabled = true;
+                },
+                disable: function () {
+                    if (!this.isEnabled) return;
+                    $('#translate-button').addClass('mdl-button--disabled');
+                    this.isEnabled = false;
+                }
+            },
+            hide: function () {
+                this.divCards.attr('hidden', true);
+            },
+            show: function () {
+                this.divCards.removeAttr('hidden');
+            }
+        }
+    };
+
+    var controller = {
+        init: function () {
+        },
+        translations: {
+            init: function () {
+                if (!view.translations.isStarted) return;
+                this.initCardsHandler();
+
+            },
+            initCardsHandler: function () {
+                $('.translation-card').keyup(cardsHandler);
+
+                function cardsHandler(eventObject) {
+                    if (eventObject.target.value.length == 0) {
+                        view.translations.fab.disable();
+                        return;
+                    }
+
+                    view.translations.fab.enable();
+                }
+            }
+        }
+    };
+
+    $(document).ready(initialization);
+
+</script>
+</body>
+</html>
